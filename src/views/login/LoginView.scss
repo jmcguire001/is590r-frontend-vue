@@ -1,1 +1,129 @@
-@use '@/assets/styles/ui.scss';
+@use "@/assets/styles/ui.scss";
+
+#login-card {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	margin: 0 auto;
+	padding-bottom: 5px;
+	max-width: 420px;
+	border: 1px solid rgb(255, 100, 100);
+	margin-top: 10px;
+	border-radius: 10px;
+	background-color: rgb(0, 0, 0);
+	color: white;
+}
+
+#login-card .v-card-title {
+	display: flex;
+	justify-content: center;
+	font-weight: bold;
+}
+
+#login-form {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	width: 100%;
+	max-width: 400px;
+	border: 1px solid rgb(255, 100, 100);
+	margin-bottom: 5px;
+}
+
+#login-form-text {
+	display: flex;
+	flex-direction: column;
+	width: 100%;
+	max-width: 380px;
+	margin-top: 10px;
+	gap: 5px;
+	color: white;
+}
+
+#login-form-text .v-text-field {
+	color: white;
+	background-color: rgb(128, 128, 128);
+	border-radius: 5px;
+}
+
+#login-form-text-username {
+}
+
+#login-form-text-password {
+}
+
+.v-divider {
+	width: 100%;
+	max-width: 380px;
+	margin: 10px 0;
+}
+
+#login-form-button {
+	display: flex;
+	flex-direction: row;
+	justify-content: flex-start;
+	gap: 5px;
+	margin-bottom: 10px;
+	margin-left: 10px;
+	width: 100%;
+	color: solid black;
+}
+
+#login-form-alert {
+	margin-bottom: 10px;
+	width: 100%;
+	max-width: 380px;
+}
+
+#login-form-alert .v-alert {
+	margin-top: 5px;
+}
+
+#login-form-button-forgot {
+	display: flex;
+	flex-direction: row;
+	align-content: center;
+	width: 100%;
+}
+
+#forgot-card {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	margin: 0 auto;
+	padding-bottom: 5px;
+	width: 100%;
+	max-width: 420px;
+	margin-top: 10px;
+	border-radius: 10px;
+	background-color: rgb(0, 0, 0);
+	color: white;
+}
+
+#forgot-card-text {
+	display: flex;
+	flex-direction: column;
+	width: 100%;
+	max-width: 380px;
+	margin-top: 10px;
+	margin-bottom: 10px;
+	gap: 5px;
+	color: white;
+}
+
+#forgot-card-text .v-text-field {
+	color: white;
+	background-color: rgb(128, 128, 128);
+	border-radius: 5px;
+	color: black;
+}
+
+#forgot-card-button {
+	display: flex;
+	flex-direction: row;
+	justify-content: flex-start;
+	gap: 5px;
+	margin-bottom: 10px;
+	margin-left: 10px;
+	width: 92%;
+}
