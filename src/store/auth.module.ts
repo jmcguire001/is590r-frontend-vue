@@ -71,6 +71,9 @@ export const auth = {
 		},
 		forgotPasswordSuccess(state) {
 			state.status.loggedIn = false
+		},
+		uploadAvatarSuccess(state, avatar) {
+			state.user.avatar = avatar
 		}
 	}
 }
