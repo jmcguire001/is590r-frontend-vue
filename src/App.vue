@@ -157,7 +157,8 @@ export default {
 			v-if="isAuthenticated"
 		>
 			<v-spacer></v-spacer>
-			<v-btn to="/home" default>Home</v-btn>
+			<v-btn to="home" default>Home</v-btn>
+			<v-btn to="teams">Teams</v-btn>
 			<v-btn to="about">About</v-btn>
 			<v-menu min-width="200px" rounded>
 				<template v-slot:activator="{ props }">
