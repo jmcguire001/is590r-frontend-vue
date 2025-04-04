@@ -90,6 +90,7 @@ export default {
 			var image = e.target.files || e.dataTransfer.files
 
 			if (!image.length) return
+
 			this.profileIsUploading = true
 			this.$store
 				.dispatch("user/uploadAvatar", image[0], { root: true })
@@ -150,6 +151,7 @@ export default {
 	}
 }
 </script>
+
 <template>
 	<v-app :theme="theme">
 		<v-app-bar

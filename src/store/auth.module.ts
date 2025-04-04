@@ -74,6 +74,9 @@ export const auth = {
 		},
 		uploadAvatarSuccess(state, avatar) {
 			state.user.avatar = avatar
+		},
+		uploadTeamLogoSuccess(state, logo) {
+			state.user.logo = logo
 		}
 	}
 }
