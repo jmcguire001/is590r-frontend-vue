@@ -97,15 +97,14 @@ export default {
 				.then((response) => {
 					this.$store.commit(
 						"auth/uploadAvatarSuccess",
-						response.avatar
+						response.data.avatar
 					)
-					alert("Image successfully uploaded!")
+
 					this.profileIsUploading = false
 					this.profileDialog = false
 				})
 				.catch((error) => {
 					console.log(error)
-					alert("Error. Try again")
 					this.profileIsUploading = false
 				})
 		},

@@ -5,13 +5,21 @@ const initialState = { teamsList: [] }
 export const team = {
 	namespaced: true,
 	state: {
-		teamsList: []
+		teamsList: [],
+		conferencesList: []
 	},
 	actions: {
 		getTeams({ commit }) {
 			return teamsService.getTeams().then((teams) => {
 				commit("setTeams", teams)
 				return Promise.resolve(teams)
+			})
+		},
+
+		getConferences({ commit }) {
+			return teamsService.getConferences().then((conferences) => {
+				commit("setConferences", conferences)
+				return Promise.resolve(conferences)
 			})
 		},
 
@@ -49,6 +57,9 @@ export const team = {
 	mutations: {
 		setTeams(state, teams) {
 			state.teamsList = teams
+		},
+		setConferences(state, conferences) {
+			state.conferencesList = conferences
 		},
 		removeTeam(state, id) {
 			state.teamsList = state.teamsList.filter((team) => team.id !== id)

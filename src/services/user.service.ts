@@ -18,8 +18,7 @@ class UserService {
 				headers: authHeader("multipart")
 			})
 			.then((response) => {
-				console.log(response.data.data)
-				return response.data.data
+				return response.data
 			})
 			.catch((error) => {
 				return Promise.reject(error)

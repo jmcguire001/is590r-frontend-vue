@@ -9,6 +9,12 @@ class TeamsService {
 			.then((response) => response.data.data)
 	}
 
+	getConferences() {
+		return axios
+			.get(API_URL + "teams/conferences", { headers: authHeader() })
+			.then((response) => response.data.data)
+	}
+
 	deleteTeam(id) {
 		return axios.delete(API_URL + "teams/" + id, { headers: authHeader() })
 	}
@@ -17,8 +23,6 @@ class TeamsService {
 		return axios
 			.put(API_URL + "teams/" + team.id, team, { headers: authHeader() })
 			.then((response) => {
-				console.log("Team successfully updated", response.data)
-				console.log("Updated team data:", response.data.data)
 				return response.data.data // ✅ Now it is properly returned
 			})
 	}
@@ -29,8 +33,6 @@ class TeamsService {
 				headers: authHeader("multipart")
 			})
 			.then((response) => {
-				console.log("Logo successfully uploaded", response.data)
-				console.log(API_URL + `teams/${teamId}/update_team_logo`)
 				return response.data
 			})
 			.catch((error) => {
@@ -47,7 +49,7 @@ class TeamsService {
 				headers: authHeader("multipart") // Ensure this sets Content-Type to multipart/form-data
 			})
 			.then((response) => {
-				return response.data
+				return response.data.data.team
 			})
 			.catch((error) => {
 				console.error("Error adding team:", error)

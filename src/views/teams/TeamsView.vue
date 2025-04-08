@@ -26,8 +26,16 @@
 					</v-card-text>
 
 					<v-card-text v-else class="back">
-						<p><strong>Conference:</strong> {{ team.confId }}</p>
-						<p><strong>Division:</strong> {{ team.divId }}</p>
+						<p v-if="team.conference">
+							<strong>Conference:</strong>
+							{{ team.conference.name }}
+						</p>
+						<p v-else><strong>Conference:</strong> Independent</p>
+
+						<p v-if="team.division">
+							<strong>Division:</strong> {{ team.division.name }}
+						</p>
+						<p v-else><strong>Division:</strong> N/A</p>
 						<p>
 							<strong>City:</strong> {{ team.city }},
 							{{ team.state }}
@@ -86,16 +94,25 @@
 											label="Mascot"
 											required
 										></v-text-field>
-										<v-text-field
+										<v-select
 											v-model="editedTeam.confId"
+											:items="conferences"
+											item-title="name"
+											item-value="id"
 											label="Conference"
 											required
-										></v-text-field>
-										<v-text-field
+										></v-select>
+										<v-select
 											v-model="editedTeam.divId"
+											:items="availableDivisions"
+											item-title="name"
+											item-value="id"
 											label="Division"
-											required
-										></v-text-field>
+											:disabled="
+												availableDivisions.length === 0
+											"
+										></v-select>
+
 										<v-text-field
 											v-model="editedTeam.city"
 											label="City"
@@ -189,7 +206,6 @@
 							label="Abbreviation"
 							required
 						></v-text-field>
-						<!-- Image Upload -->
 						<v-file-input
 							accept="image/*"
 							label="Team Logo"
@@ -205,16 +221,22 @@
 							label="Mascot"
 							required
 						></v-text-field>
-						<v-text-field
+						<v-select
 							v-model="newTeam.confId"
+							:items="conferences"
+							item-title="name"
+							item-value="id"
 							label="Conference"
 							required
-						></v-text-field>
-						<v-text-field
+						></v-select>
+						<v-select
 							v-model="newTeam.divId"
+							:items="availableDivisions"
+							item-title="name"
+							item-value="id"
 							label="Division"
-							required
-						></v-text-field>
+							:disabled="availableDivisions.length === 0"
+						></v-select>
 						<v-text-field
 							v-model="newTeam.city"
 							label="City"

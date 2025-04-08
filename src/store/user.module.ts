@@ -16,6 +16,7 @@ export const user = {
 		},
 		uploadAvatar({ commit }, image) {
 			return userService.uploadAvatar(image).then((response) => {
+				commit("setAvatar", response.data.avatar)
 				return Promise.resolve(response)
 			})
 		},
@@ -48,6 +49,9 @@ export const user = {
 		},
 		setEmail(state, user) {
 			state.user.email = user.email
+		},
+		setAvatar(state, avatar) {
+			state.user.avatar = avatar
 		}
 	},
 	getters: {
