@@ -15,6 +15,12 @@ class TeamsService {
 			.then((response) => response.data.data)
 	}
 
+	getSponsors() {
+		return axios
+			.get(API_URL + "teams/sponsors", { headers: authHeader() })
+			.then((response) => response.data.data)
+	}
+
 	deleteTeam(id) {
 		return axios.delete(API_URL + "teams/" + id, { headers: authHeader() })
 	}
@@ -23,7 +29,7 @@ class TeamsService {
 		return axios
 			.put(API_URL + "teams/" + team.id, team, { headers: authHeader() })
 			.then((response) => {
-				return response.data.data // ✅ Now it is properly returned
+				return response.data.data
 			})
 	}
 
@@ -37,7 +43,6 @@ class TeamsService {
 			})
 			.catch((error) => {
 				console.error("Error uploading logo:", error)
-				console.log(API_URL + `teams/${teamId}/update_team_logo`)
 				return Promise.reject(error)
 			})
 	}
@@ -46,7 +51,7 @@ class TeamsService {
 		// Make the API call to add the team
 		return axios
 			.post(API_URL + "teams", teamData, {
-				headers: authHeader("multipart") // Ensure this sets Content-Type to multipart/form-data
+				headers: authHeader("multipart")
 			})
 			.then((response) => {
 				return response.data.data.team

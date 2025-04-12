@@ -7,7 +7,6 @@ class AuthService {
 		formData.append("email", user.email)
 		formData.append("password", user.password)
 		return axios.post(API_URL + "login", formData).then((response) => {
-			console.log("response -- ", response)
 			if (response.data.data.token) {
 				localStorage.setItem("user", JSON.stringify(response.data.data))
 			}
@@ -30,13 +29,11 @@ class AuthService {
 	}
 
 	forgotPassword(email) {
-		console.log("inside service -- ", email)
 		let formData = new FormData()
 		formData.append("email", email)
 		return axios
 			.post(API_URL + "forgot_password", formData)
 			.then((response) => {
-				console.log("response -- ", response)
 				return response.data
 			})
 	}

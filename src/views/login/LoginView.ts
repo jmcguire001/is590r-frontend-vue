@@ -39,8 +39,6 @@ export default {
 				password: this.password
 			}
 
-			console.log(user)
-
 			this.errorMsg = ""
 			this.isLoading = true
 
@@ -114,6 +112,13 @@ export default {
 					}, 3000)
 				},
 				(error) => {
+					this.alertForgot = true
+
+					setTimeout(() => {
+						this.alertForgot = false
+						this.forgot = false
+					}, 3000)
+
 					this.submitForgotLoad = false
 				}
 			)

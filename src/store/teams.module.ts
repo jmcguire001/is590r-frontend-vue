@@ -6,7 +6,8 @@ export const team = {
 	namespaced: true,
 	state: {
 		teamsList: [],
-		conferencesList: []
+		conferencesList: [],
+		sponsorsList: []
 	},
 	actions: {
 		getTeams({ commit }) {
@@ -20,6 +21,13 @@ export const team = {
 			return teamsService.getConferences().then((conferences) => {
 				commit("setConferences", conferences)
 				return Promise.resolve(conferences)
+			})
+		},
+
+		getSponsors({ commit }) {
+			return teamsService.getSponsors().then((sponsors) => {
+				commit("setSponsors", sponsors)
+				return Promise.resolve(sponsors)
 			})
 		},
 
@@ -44,10 +52,6 @@ export const team = {
 		},
 
 		addTeam({ commit }, team) {
-			if (!team.divId) {
-				team.divId = null
-			}
-
 			return teamsService.addTeam(team).then((newTeam) => {
 				commit("addTeam", newTeam)
 			})
@@ -60,6 +64,9 @@ export const team = {
 		},
 		setConferences(state, conferences) {
 			state.conferencesList = conferences
+		},
+		setSponsors(state, sponsors) {
+			state.sponsorsList = sponsors
 		},
 		removeTeam(state, id) {
 			state.teamsList = state.teamsList.filter((team) => team.id !== id)

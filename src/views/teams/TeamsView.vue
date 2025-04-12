@@ -1,5 +1,5 @@
 <template>
-	<v-btn color="primary" @click="openAddTeamDialog">Add New Team</v-btn>
+	<v-btn color="#666666" @click="openAddTeamDialog">Add New Team</v-btn>
 
 	<v-container>
 		<v-row>
@@ -11,14 +11,23 @@
 				md="4"
 				lg="3"
 			>
-				<v-card class="flip-card" @click="toggleFlip(team.id)">
+				<v-card class="flip-card d-flex flex-column justify-space-between h-100" @click="toggleFlip(team.id)">
 					<v-card-text v-if="flippedCard !== team.id" class="front">
 						<h3 class="text-center">{{ team.abbr }}</h3>
+						<v-divider color="white" :thickness="3"></v-divider>
 						<v-img
-							:src="team.logo"
+							v-if="team.logo"
 							aspect-ratio="1"
 							class="team-logo"
-						></v-img>
+							:src="team.logo"
+						/>
+						<v-alert
+							v-else
+							type="info"
+						>
+							No logo available
+						</v-alert>
+						<v-divider color="white" :thickness="3"></v-divider>
 						<div>
 							<h4>{{ team.name }}</h4>
 							<p>{{ team.mascot }}</p>
@@ -43,7 +52,19 @@
 						<p><strong>Country:</strong> {{ team.country }}</p>
 						<p><strong>Stadium:</strong> {{ team.stadium }}</p>
 
-						<v-row class="mt-3">
+						<p v-if="team.sponsors && team.sponsors.length">
+							<strong>Sponsors:</strong>
+							<ul style="padding-left: 1.5rem; margin: 0;">
+								<li v-for="sponsor in team.sponsors" :key="sponsor.id">
+									{{ sponsor.name }}
+								</li>
+							</ul>
+						</p>
+						<p v-else>
+							<strong>Sponsors:</strong> None
+						</p>
+
+						<v-row class="mt-auto pt-3">
 							<v-col cols="6">
 								<v-btn
 									color="primary"
@@ -65,19 +86,19 @@
 						</v-row>
 
 						<v-dialog v-model="editDialog" max-width="500px">
-							<v-card>
+							<v-card color="gray">
 								<v-card-title>Edit Team</v-card-title>
 								<v-card-text>
 									<v-form ref="editForm" v-model="isValid">
 										<v-text-field
 											v-model="editedTeam.name"
-											label="Team Name"
-											required
+											label="Team Name*"
+											:rules="[required]"
 										></v-text-field>
 										<v-text-field
 											v-model="editedTeam.abbr"
-											label="Abbreviation"
-											required
+											label="Abbreviation*"
+											:rules="[required]"
 										></v-text-field>
 										<v-file-input
 											accept="image/*"
@@ -91,8 +112,8 @@
 										></v-img>
 										<v-text-field
 											v-model="editedTeam.mascot"
+											:value="editedTeam.mascot"
 											label="Mascot"
-											required
 										></v-text-field>
 										<v-select
 											v-model="editedTeam.confId"
@@ -100,7 +121,6 @@
 											item-title="name"
 											item-value="id"
 											label="Conference"
-											required
 										></v-select>
 										<v-select
 											v-model="editedTeam.divId"
@@ -112,27 +132,34 @@
 												availableDivisions.length === 0
 											"
 										></v-select>
-
 										<v-text-field
 											v-model="editedTeam.city"
-											label="City"
-											required
+											label="City*"
+											:rules="[required]"
 										></v-text-field>
 										<v-text-field
 											v-model="editedTeam.state"
-											label="State"
-											required
+											label="State*"
+											:rules="[required]"
 										></v-text-field>
 										<v-text-field
 											v-model="editedTeam.country"
-											label="Country"
-											required
+											label="Country*"
+											:rules="[required]"
 										></v-text-field>
 										<v-text-field
 											v-model="editedTeam.stadium"
-											label="Stadium"
-											required
+											label="Stadium*"
+											:rules="[required]"
 										></v-text-field>
+										<v-select
+											v-model="editedTeam.sponsors"
+											:items="sponsors"
+											:multiple="true"
+											item-title="name"
+											item-value="id"
+											label="Sponsors"
+										></v-select>
 										<v-alert
 											v-if="errorMessage"
 											type="error"
@@ -192,19 +219,19 @@
 
 		<!-- Add Team Dialog -->
 		<v-dialog v-model="addDialog" max-width="500px">
-			<v-card>
+			<v-card color="gray">
 				<v-card-title>Add New Team</v-card-title>
 				<v-card-text>
 					<v-form ref="addForm" v-model="isValidAdd">
 						<v-text-field
 							v-model="newTeam.name"
-							label="Team Name"
-							required
+							label="Team Name*"
+							:rules="[required]"
 						></v-text-field>
 						<v-text-field
 							v-model="newTeam.abbr"
-							label="Abbreviation"
-							required
+							label="Abbreviation*"
+							:rules="[required]"
 						></v-text-field>
 						<v-file-input
 							accept="image/*"
@@ -219,7 +246,6 @@
 						<v-text-field
 							v-model="newTeam.mascot"
 							label="Mascot"
-							required
 						></v-text-field>
 						<v-select
 							v-model="newTeam.confId"
@@ -227,7 +253,6 @@
 							item-title="name"
 							item-value="id"
 							label="Conference"
-							required
 						></v-select>
 						<v-select
 							v-model="newTeam.divId"
@@ -239,24 +264,32 @@
 						></v-select>
 						<v-text-field
 							v-model="newTeam.city"
-							label="City"
-							required
+							label="City*"
+							:rules="[required]"
 						></v-text-field>
 						<v-text-field
 							v-model="newTeam.state"
-							label="State"
-							required
+							label="State*"
+							:rules="[required]"
 						></v-text-field>
 						<v-text-field
 							v-model="newTeam.country"
-							label="Country"
-							required
+							label="Country*"
+							:rules="[required]"
 						></v-text-field>
 						<v-text-field
 							v-model="newTeam.stadium"
-							label="Stadium"
-							required
+							label="Stadium*"
+							:rules="[required]"
 						></v-text-field>
+						<v-select
+							v-model="sponsorIds"
+							:items="sponsors"
+							:multiple="true"
+							item-title="name"
+							item-value="id"
+							label="Sponsors"
+						></v-select>
 
 						<v-alert v-if="errorMessageAdd" type="error" dense>
 							{{ errorMessageAdd }}

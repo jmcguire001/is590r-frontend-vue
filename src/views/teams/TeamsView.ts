@@ -10,6 +10,9 @@ export default {
 			},
 			conferences() {
 				return this.$store.state.team.conferencesList
+			},
+			sponsors() {
+				return this.$store.state.team.sponsorsList
 			}
 		})
 	},
@@ -30,12 +33,14 @@ export default {
 			isLoadingNewTeam: false,
 			isLoading: false,
 			availableDivisions: [],
+			sponsorIds: [],
 			editedTeam: {}
 		}
 	},
 	created() {
 		this.getTeams()
 		this.getConferences()
+		this.getSponsors()
 	},
 	methods: {
 		// Toggle Flip
@@ -52,6 +57,12 @@ export default {
 
 		getConferences() {
 			this.$store.dispatch("team/getConferences").then(() => {
+				this.isLoadingTeams = false
+			})
+		},
+
+		getSponsors() {
+			this.$store.dispatch("team/getSponsors").then(() => {
 				this.isLoadingTeams = false
 			})
 		},
@@ -165,6 +176,16 @@ export default {
 
 			this.isLoading = true
 
+			if (
+				this.editedTeam.sponsors &&
+				Array.isArray(this.editedTeam.sponsors)
+			) {
+				this.editedTeam.sponsorIds = JSON.stringify(
+					this.editedTeam.sponsors
+				)
+				delete this.editedTeam.sponsors
+			}
+
 			this.$store
 				.dispatch("team/updateTeam", this.editedTeam)
 				.then(() => {
@@ -183,6 +204,7 @@ export default {
 		openAddTeamDialog() {
 			this.newTeam = {} // Reset the new team form data
 			this.addDialog = true
+			this.sponsorIds = [] // Reset selected sponsors
 		},
 
 		// Handle file selection for team logo (add)
@@ -193,6 +215,7 @@ export default {
 
 			if (file) {
 				this.newTeam.logo = file // Store the file directly, not the base64 data
+				console.log("Selected logo file:", file)
 			}
 		},
 
@@ -200,28 +223,44 @@ export default {
 		addTeam() {
 			const formData = new FormData()
 
-			// Add other team data to formData
+			// Add required fields
 			formData.append("name", this.newTeam.name)
 			formData.append("abbr", this.newTeam.abbr)
-			formData.append("confId", this.newTeam.confId)
 			formData.append("city", this.newTeam.city)
 			formData.append("state", this.newTeam.state)
 			formData.append("country", this.newTeam.country)
 			formData.append("stadium", this.newTeam.stadium)
-			formData.append("mascot", this.newTeam.mascot)
+			formData.append("mascot", this.newTeam.mascot ?? "")
 
-			if(!this.newTeam.confId) {
-				this.newTeam.confId = null
+			// Handle nullable select fields properly
+			if (
+				this.newTeam.confId !== undefined &&
+				this.newTeam.confId !== null
+			) {
+				formData.append("confId", this.newTeam.confId)
 			}
 
-			if (!this.newTeam.divId) {
-				this.newTeam.divId = null
+			if (
+				this.newTeam.divId !== undefined &&
+				this.newTeam.divId !== null
+			) {
+				formData.append("divId", this.newTeam.divId)
 			}
 
-			// Ensure the logo is added as a File
+			// Handle logo and sponsors
 			if (this.newTeam.logo) {
 				formData.append("logo", this.newTeam.logo)
 			}
+
+			// Modify this section in your addTeam method
+			if (this.sponsorIds && this.sponsorIds.length > 0) {
+				formData.append("sponsorIds", JSON.stringify(this.sponsorIds))
+			} else {
+				// Ensure we send an empty array when no sponsors are selected
+				formData.append("sponsorIds", JSON.stringify([]))
+			}
+
+			formData.append("sponsorIds", JSON.stringify(this.sponsorIds))
 
 			this.isLoadingNewTeam = true
 
@@ -233,11 +272,15 @@ export default {
 					this.successMessage = "Team successfully added."
 					this.showSuccessSnackbar = true
 					this.isLoadingNewTeam = false
+					this.getTeams()
 				})
 				.catch((error) => {
 					this.errorMessageAdd = "Error adding team."
 					console.error("Error adding team:", error)
 				})
+		},
+		required(v) {
+			return !!v || "Field is required"
 		}
 	},
 	watch: {

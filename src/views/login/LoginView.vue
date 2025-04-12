@@ -1,15 +1,7 @@
 <template>
-	<div
-		style="
-			display: flex;
-			width: 100vw;
-			height: 100vh;
-			justify-content: center;
-			align-items: center;
-		"
-	>
+	<div id="login-view">
 		<v-card id="login-card">
-			<v-card-title>Welcome</v-card-title>
+			<v-card-title>Login</v-card-title>
 
 			<v-form id="login-form" v-model="loginForm">
 				<div id="login-form-text">
