@@ -109,6 +109,7 @@
 											v-if="editedTeam.logo"
 											:src="editedTeam.logo"
 											max-height="50"
+											class="mb-2"
 										></v-img>
 										<v-text-field
 											v-model="editedTeam.mascot"
@@ -148,9 +149,9 @@
 											:rules="[required]"
 										></v-text-field>
 										<v-text-field
-											v-model="editedTeam.stadium.name"
+											v-model="editedTeam.stadiumName"
 											label="Stadium*"
-											:rules="[required]"
+											:rules="[required, stadiumAvailable]"
 										></v-text-field>
 										<v-select
 											v-model="editedTeam.sponsors"
@@ -280,7 +281,7 @@
 						<v-text-field
 							v-model="newTeam.stadium"
 							label="Stadium*"
-							:rules="[required]"
+							:rules="[required, stadiumAvailable]"
 						></v-text-field>
 						<v-select
 							v-model="sponsorIds"
@@ -315,9 +316,12 @@
 			v-model="showSuccessSnackbar"
 			color="success"
 			timeout="3000"
-		>
-			{{ successMessage }}
-			<v-btn text @click="showSuccessSnackbar = false">OK</v-btn>
+			:close-on-content-click="false"
+			>
+			<div class="d-flex align-center justify-space-between" style="width: 100%">
+				<span>{{ successMessage }}</span>
+				<v-btn text @click="showSuccessSnackbar = false" class="ml-auto">OK</v-btn>
+			</div>
 		</v-snackbar>
 	</v-container>
 </template>

@@ -75,8 +75,18 @@ class TeamsService {
 				headers: authHeader()
 			})
 			.then((response) => {
-				console.log("Stadium check response:", response.data.status)
-				return response.data.data
+				return response.data.status
+			})
+	}
+
+	checkStadiumEdit(name) {
+		return axios
+			.get(API_URL + "stadiums/edit", {
+				params: { name },
+				headers: authHeader()
+			})
+			.then((response) => {
+				return response.data.status
 			}) // assuming your API returns `{ exists: true/false }`
 	}
 }

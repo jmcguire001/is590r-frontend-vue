@@ -40,7 +40,8 @@ export default {
 			availableDivisions: [],
 			sponsorIds: [],
 			editedTeam: {},
-			stadiumInUse: false
+			stadiumInUse: false,
+			stadiumError: ""
 		}
 	},
 	created() {
@@ -160,6 +161,7 @@ export default {
 
 			this.isValid = true
 			this.editedTeam = { ...team } // Create a shallow copy of the team object
+			this.editedTeam.stadiumName = team.stadium.name
 			this.editDialog = true
 		},
 
@@ -184,8 +186,10 @@ export default {
 		},
 
 		// Update Team
-		updateTeam() {
+		async updateTeam() {
 			if (!this.editedTeam) return
+
+			await this.validateEditedStadium() // Validate stadium before proceeding
 
 			this.isLoading = true
 
@@ -193,11 +197,15 @@ export default {
 				this.editedTeam.sponsors &&
 				Array.isArray(this.editedTeam.sponsors)
 			) {
-				this.editedTeam.sponsorIds = JSON.stringify(
-					this.editedTeam.sponsors
-				)
+				// Ensure you're sending only IDs
+				const sponsorIds = this.editedTeam.sponsors.map(
+					(s) => s.id ?? s
+				) // Handles both objects and raw IDs
+				this.editedTeam.sponsorIds = JSON.stringify(sponsorIds)
 				delete this.editedTeam.sponsors
 			}
+
+			console.log("Sponsor IDs:", this.editedTeam.sponsorIds)
 
 			this.$store
 				.dispatch("team/updateTeam", this.editedTeam)
@@ -228,7 +236,6 @@ export default {
 
 			if (file) {
 				this.newTeam.logo = file // Store the file directly, not the base64 data
-				console.log("Selected logo file:", file)
 			}
 		},
 
@@ -301,30 +308,66 @@ export default {
 		},
 
 		async validateStadium() {
-			if (!this.newTeam.stadium) return
+			if (!this.newTeam.stadium) {
+				this.stadiumError = "Stadium is required."
+				this.isValidAdd = false
+				return
+			}
 
 			try {
 				const exists = await this.$store.dispatch(
 					"team/checkStadium",
 					this.newTeam.stadium
 				)
-				if (exists) {
-					this.errorMessageAdd =
-						"Stadium already exists and is in use."
-					this.isValidAdd = false
+
+				if (exists == "new" || exists == "available") {
+					this.stadiumError = ""
 				} else {
-					this.errorMessageAdd = ""
-					this.isValidAdd = true
+					this.stadiumError = "Stadium already exists and is in use."
 				}
 			} catch (error) {
-				console.error("Error checking stadium:", error)
-				this.errorMessageAdd = "Could not validate stadium."
-				this.isValidAdd = false
+				this.stadiumError = "Could not validate stadium."
+			}
+		},
+
+		async validateEditedStadium() {
+			if (!this.editedTeam.stadiumName) {
+				this.stadiumError = "Stadium is required."
+				this.isValid = false
+				return
+			}
+
+			try {
+				const exists = await this.$store.dispatch(
+					"team/checkStadiumEdit",
+					this.editedTeam.stadiumName
+				)
+
+				if (exists == "new" || exists == "available") {
+					this.stadiumError = ""
+				} else {
+					const $stadiumNameTeam = this.teams.find(
+						(t) => t.id === this.editedTeam.id
+					).stadium.name
+
+					if (this.editedTeam.stadiumName == $stadiumNameTeam) {
+						this.stadiumError = ""
+					} else {
+						this.stadiumError =
+							"Stadium already exists and is in use."
+					}
+				}
+			} catch (error) {
+				this.stadiumError = "Could not validate stadium."
 			}
 		},
 
 		required(v) {
 			return !!v || "Field is required"
+		},
+
+		stadiumAvailable(v) {
+			return !this.stadiumError || this.stadiumError // If no error, pass; otherwise, show the error
 		}
 	},
 	watch: {
@@ -337,6 +380,12 @@ export default {
 		"newTeam.stadium": {
 			handler: _.debounce(function () {
 				this.validateStadium()
+			}, 500),
+			immediate: false
+		},
+		"editedTeam.stadiumName": {
+			handler: _.debounce(function () {
+				this.validateEditedStadium()
 			}, 500),
 			immediate: false
 		}

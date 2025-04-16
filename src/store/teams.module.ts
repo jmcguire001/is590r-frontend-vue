@@ -68,6 +68,10 @@ export const team = {
 
 		checkStadium({ commit }, name) {
 			return teamsService.checkStadium(name)
+		},
+
+		checkStadiumEdit({ commit }, name) {
+			return teamsService.checkStadiumEdit(name)
 		}
 	},
 
