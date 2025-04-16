@@ -1,3 +1,4 @@
+import { get } from "http"
 import teamsService from "../services/teams.service"
 
 const initialState = { teamsList: [] }
@@ -7,7 +8,8 @@ export const team = {
 	state: {
 		teamsList: [],
 		conferencesList: [],
-		sponsorsList: []
+		sponsorsList: [],
+		stadiumsList: []
 	},
 	actions: {
 		getTeams({ commit }) {
@@ -28,6 +30,13 @@ export const team = {
 			return teamsService.getSponsors().then((sponsors) => {
 				commit("setSponsors", sponsors)
 				return Promise.resolve(sponsors)
+			})
+		},
+
+		getStadiums({ commit }) {
+			return teamsService.getStadiums().then((stadiums) => {
+				commit("setStadiums", stadiums)
+				return Promise.resolve(stadiums)
 			})
 		},
 
@@ -55,6 +64,10 @@ export const team = {
 			return teamsService.addTeam(team).then((newTeam) => {
 				commit("addTeam", newTeam)
 			})
+		},
+
+		checkStadium({ commit }, name) {
+			return teamsService.checkStadium(name)
 		}
 	},
 
@@ -67,6 +80,9 @@ export const team = {
 		},
 		setSponsors(state, sponsors) {
 			state.sponsorsList = sponsors
+		},
+		setStadiums(state, stadiums) {
+			state.stadiumsList = stadiums
 		},
 		removeTeam(state, id) {
 			state.teamsList = state.teamsList.filter((team) => team.id !== id)

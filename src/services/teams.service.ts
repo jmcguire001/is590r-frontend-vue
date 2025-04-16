@@ -21,6 +21,12 @@ class TeamsService {
 			.then((response) => response.data.data)
 	}
 
+	getStadiums() {
+		return axios
+			.get(API_URL + "teams/stadiums", { headers: authHeader() })
+			.then((response) => response.data.data)
+	}
+
 	deleteTeam(id) {
 		return axios.delete(API_URL + "teams/" + id, { headers: authHeader() })
 	}
@@ -60,6 +66,18 @@ class TeamsService {
 				console.error("Error adding team:", error)
 				return Promise.reject(error)
 			})
+	}
+
+	checkStadium(name) {
+		return axios
+			.get(API_URL + "stadiums/check", {
+				params: { name },
+				headers: authHeader()
+			})
+			.then((response) => {
+				console.log("Stadium check response:", response.data.status)
+				return response.data.data
+			}) // assuming your API returns `{ exists: true/false }`
 	}
 }
 

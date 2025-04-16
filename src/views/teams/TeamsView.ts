@@ -1,5 +1,7 @@
+import _ from "lodash"
 import { mapState } from "vuex"
 import teamsService from "../services/teams.service"
+import { get } from "http"
 
 export default {
 	name: "TeamsView",
@@ -13,6 +15,9 @@ export default {
 			},
 			sponsors() {
 				return this.$store.state.team.sponsorsList
+			},
+			stadiums() {
+				return this.$store.state.team.stadiumsList
 			}
 		})
 	},
@@ -34,13 +39,15 @@ export default {
 			isLoading: false,
 			availableDivisions: [],
 			sponsorIds: [],
-			editedTeam: {}
+			editedTeam: {},
+			stadiumInUse: false
 		}
 	},
 	created() {
 		this.getTeams()
 		this.getConferences()
 		this.getSponsors()
+		this.getStadiums()
 	},
 	methods: {
 		// Toggle Flip
@@ -63,6 +70,12 @@ export default {
 
 		getSponsors() {
 			this.$store.dispatch("team/getSponsors").then(() => {
+				this.isLoadingTeams = false
+			})
+		},
+
+		getStadiums() {
+			this.$store.dispatch("team/getStadiums").then(() => {
 				this.isLoadingTeams = false
 			})
 		},
@@ -220,7 +233,14 @@ export default {
 		},
 
 		// Add New Team
-		addTeam() {
+		async addTeam() {
+			await this.validateStadium() // Validate stadium before proceeding
+
+			if (!this.isValidAdd) {
+				this.isLoadingNewTeam = false
+				return
+			}
+
 			const formData = new FormData()
 
 			// Add required fields
@@ -279,6 +299,30 @@ export default {
 					console.error("Error adding team:", error)
 				})
 		},
+
+		async validateStadium() {
+			if (!this.newTeam.stadium) return
+
+			try {
+				const exists = await this.$store.dispatch(
+					"team/checkStadium",
+					this.newTeam.stadium
+				)
+				if (exists) {
+					this.errorMessageAdd =
+						"Stadium already exists and is in use."
+					this.isValidAdd = false
+				} else {
+					this.errorMessageAdd = ""
+					this.isValidAdd = true
+				}
+			} catch (error) {
+				console.error("Error checking stadium:", error)
+				this.errorMessageAdd = "Could not validate stadium."
+				this.isValidAdd = false
+			}
+		},
+
 		required(v) {
 			return !!v || "Field is required"
 		}
@@ -289,6 +333,12 @@ export default {
 		},
 		"editedTeam.confId": function () {
 			this.updateDivision()
+		},
+		"newTeam.stadium": {
+			handler: _.debounce(function () {
+				this.validateStadium()
+			}, 500),
+			immediate: false
 		}
 	}
 }

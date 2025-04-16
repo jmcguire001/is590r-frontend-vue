@@ -50,7 +50,7 @@
 							{{ team.state }}
 						</p>
 						<p><strong>Country:</strong> {{ team.country }}</p>
-						<p><strong>Stadium:</strong> {{ team.stadium }}</p>
+						<p><strong>Stadium:</strong> {{ team.stadium.name }}</p>
 
 						<p v-if="team.sponsors && team.sponsors.length">
 							<strong>Sponsors:</strong>
@@ -148,7 +148,7 @@
 											:rules="[required]"
 										></v-text-field>
 										<v-text-field
-											v-model="editedTeam.stadium"
+											v-model="editedTeam.stadium.name"
 											label="Stadium*"
 											:rules="[required]"
 										></v-text-field>
