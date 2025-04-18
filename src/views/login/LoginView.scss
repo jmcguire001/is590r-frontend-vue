@@ -1,1 +1,202 @@
-@use '@/assets/styles/ui.scss';
+@import "@/assets/styles/ui.scss";
+
+.v-container {
+	display: flex;
+	justify-content: flex-start; /* Vertically center content inside card */
+	align-items: center; /* Horizontally center content inside card */
+}
+
+#login-view {
+	display: flex;
+	justify-content: center; /* Horizontally center content inside card */
+	align-items: center; /* Vertically center content inside card */
+	height: 100vh;
+	width: 100vw;
+}
+
+#login-card {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	margin: 0 auto;
+	padding-bottom: 5px;
+	max-width: 520px;
+	width: 100%;
+	border-radius: 10px;
+	background-color: $base-black;
+	color: $base-text;
+}
+
+#login-card .v-card-title {
+	display: flex;
+	justify-content: center;
+	font-weight: bold;
+}
+
+#login-form {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	width: 100%;
+	max-width: 500px;
+	margin-bottom: 5px;
+}
+
+#login-form-text {
+	display: flex;
+	flex-direction: column;
+	width: 100%;
+	max-width: 480px;
+	margin-top: 10px;
+	gap: 10px;
+	color: $base-text;
+}
+
+#login-form-text .v-text-field {
+	color: $base-text;
+	background-color: $base-gray;
+	border-radius: 5px;
+}
+
+#login-form-text-username {
+	color: $base-text;
+}
+
+#login-form-text-password {
+	color: $base-text;
+}
+
+.v-divider {
+	width: 100%;
+	max-width: 480px;
+	margin: 10px 0;
+}
+
+#login-form-button {
+	display: flex;
+	flex-direction: row;
+	justify-content: flex-start;
+	gap: 5px;
+	margin-left: 20px;
+	width: 100%;
+}
+
+#login-form-alert {
+	margin-bottom: 10px;
+	width: 100%;
+	max-width: 480px;
+}
+
+#login-form-alert .v-alert {
+	margin-top: 10px;
+}
+
+#login-form-button-forgot {
+	display: flex;
+	flex-direction: row;
+	align-content: center;
+	width: 100%;
+}
+
+#register-form {
+	display: flex;
+	flex-direction: column;
+	align-items: left;
+	width: 100%;
+	max-width: 520px;
+	margin-bottom: 5px;
+}
+
+#register-form-button {
+	margin-top: -5px;
+	margin-left: 20px;
+	width: auto;
+	max-width: fit-content;
+}
+
+#register-card {
+	display: flex;
+	flex-direction: column;
+	margin: 0 auto;
+	padding-bottom: 5px;
+	width: 100%;
+	max-width: 420px;
+	margin-top: 10px;
+	border-radius: 10px;
+	background-color: $base-black;
+	color: $base-text;
+}
+
+#register-card .v-card-title {
+	margin: 0 auto;
+}
+
+#register-card-text .v-text-field {
+	display: flex;
+	flex-direction: column;
+	margin: 0 auto;
+	width: 100%;
+	max-width: 380px;
+	margin-top: 10px;
+	margin-bottom: 10px;
+	gap: 5px;
+	background-color: $base-gray;
+	border-radius: 5px;
+	color: $base-text;
+}
+
+#register-card-buttons {
+	display: flex;
+	justify-content: flex-start;
+	gap: 5px;
+	margin-bottom: 10px;
+	margin-left: 20px;
+	width: 100%;
+}
+
+#forgot-card {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	margin: 0 auto;
+	padding-bottom: 5px;
+	width: 100%;
+	max-width: 420px;
+	margin-top: 10px;
+	border-radius: 10px;
+	background-color: $base-black;
+	color: $base-text;
+}
+
+#forgot-card-text {
+	display: flex;
+	flex-direction: column;
+	width: 100%;
+	max-width: 380px;
+	margin-top: 10px;
+	margin-bottom: 10px;
+	gap: 5px;
+}
+
+#forgot-card-text .v-text-field {
+	color: white;
+	background-color: $base-gray;
+	border-radius: 5px;
+	color: $base-text;
+}
+
+#forgot-card-button {
+	display: flex;
+	flex-direction: row;
+	justify-content: flex-start;
+	gap: 5px;
+	margin-bottom: 10px;
+	margin-left: 40px;
+	width: 100%;
+}
+
+#forgot-card-alert {
+	margin-bottom: 10px;
+	width: 100%;
+	max-width: 380px;
+}

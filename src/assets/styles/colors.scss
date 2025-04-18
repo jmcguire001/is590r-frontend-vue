@@ -1,15 +1,21 @@
-// Global Colors Here
-
-
-
-
+// Global Colors
 $colors-ui-white: #f4f4f4;
-$colors-yellow: #E8C547;
-$colors-ui-black: #30323D;
-$colors-ui-grey: #4D5061;
-$colors-ui-blue: #5C80BC;
-$colors-ui-tan: #CDD1C4;
-
+$colors-yellow: #e8c547;
+$colors-ui-black: #30323d;
+$colors-ui-grey: #4d5061;
+$colors-ui-blue: #5c80bc;
+$colors-ui-tan: #cdd1c4;
 $colors-background: $colors-ui-tan;
 $colors-border: $colors-ui-grey;
 $colors-general-text: $colors-ui-grey;
+
+// Base Colors
+$base-black: #333333;
+$base-gray: #666666;
+$base-tan: #005eb8;
+$base-text: #f6c75d;
+
+// Login Page
+$login-card-background: #c7cccf;
+$border-color: #fd6326;
+$login-font-color: #d8c500;
